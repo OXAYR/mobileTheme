@@ -1,0 +1,31 @@
+
+
+  .menu-item {
+    margin-right: 10px; /* Adjust the margin as needed */
+}
+
+.menu-item a {
+    text-decoration: none;
+    color: black;
+    transition: background-color 0.3s;
+}
+
+.menu-item a:hover {
+    text-decoration: none;
+    background-color: #f0f0f0; /* Change this color to the desired tint color on hover */
+    color: black; /* You can adjust the text color on hover if needed */
+}
+
+  .content{
+    margin: auto;
+  }
+
+  footer {
+  
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+  
