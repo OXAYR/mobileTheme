@@ -17,7 +17,7 @@
                             <div class="thumbnail-container">
                                 <?php the_post_thumbnail('medium', array('class' => 'img-responsive center-block')); ?>
                             </div>
-                            <div class="text-xl-center text-warning">Price: <?php echo st_meta(get_the_ID(), '_price', true)); ?> </div>
+                            <div class="text-xl-center text-warning">Price: <?php echo get_post_meta(get_the_ID(), '_price', true); ?> </div>
                         <?php endif; ?>
                     </div>
                     <div class="product-details">

@@ -38,7 +38,7 @@
             </div>
         </div>
 
-        <div class="col-xs-12 text-center">
+        <div class="col-xs-12 text-center ">
             <?php the_posts_navigation(); ?>
         </div>
 

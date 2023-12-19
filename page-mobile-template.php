@@ -30,11 +30,11 @@ if ($loop->have_posts()) :
                         <?php get_sidebar(); ?>
                     </div>
     </div>
-    <div class="col-8">
+    <div class="col-8 ">
     <?php
-    echo '<div class="pagination d-flex justify-content-between">';
-    previous_posts_link(' Newer Posts');
-    next_posts_link('Older Posts ');
+    echo '<div class="pagination d-flex justify-content-between mb-5 pb-5">';
+    next_posts_link('Older Posts ',$loop->max_num_pages);
+    previous_posts_link(' Newer Posts',$loop->max_num_pages);
     echo '</div>';
 else :
     echo 'No posts found';
