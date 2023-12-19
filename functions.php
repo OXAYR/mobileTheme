@@ -219,7 +219,15 @@ return $form_html;
 
 add_shortcode( "footer_form", "mobile_form_shortcode" );
 
+add_action('wp_ajax_contact_us','ajax_contact_us');
 
+function ajax_contact_us(){
+    $arr=[];
+    wp_parse_str($_POST['contact_us'],$arr);
+    global $wbdp;
+    global $table_prefix;
+    
+}
 
 
 ?>
