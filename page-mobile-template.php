@@ -15,7 +15,7 @@ $args = array(
 );
 
 $loop = new WP_Query($args); ?>
-<div class="d-flex flex-row col-md-8">
+<div class="d-flex flex-row col-md-8 ">
     <?php
 if ($loop->have_posts()) :
     while ($loop->have_posts()) : $loop->the_post(); 
