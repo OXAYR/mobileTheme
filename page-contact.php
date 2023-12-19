@@ -19,7 +19,7 @@ get_header(); ?>
 					
 					<hr>
 
-                    <form id="contact_form" method="post" class="d-flex flex-column mt-2">
+                    <form id="contact_form" class="d-flex flex-column mt-2">
                         <div class="form-group w-100">
                             <label for="name" class="sr-only w-25">Name:</label>
                             <input type="text" name="name" id="name" class="form-control" placeholder="Your Name" required>
@@ -46,27 +46,37 @@ get_header(); ?>
 		</div>
 	</div>
 
-	<script>
 
-		jQuery('#contact_form').submit(function(){
-			event.preventDefault();
-			var link = "<?php echo admin_url( 'admin-ajax.php' )?>";
-			var form=jQuery("#contact_us").serialize();
-			var formData = new FormData;
-			formData.append('action','contact_us');
-			formData.append('constact_us',form);
-			jQuery.ajax({
-				url:link,
-				data:formData,
-				processData:false,
-				contentType:false,
-				type:'post',
-				success:function(result){
-					alert(result);
-				}
 
-			});
-		});
-	</script>
+<script>
+    jQuery(document).ready(function($) {
+        $('#contact_form').submit(function(event){
+            event.preventDefault();
+            var link = "<?php echo admin_url('admin-ajax.php'); ?>";
+			var form=jQuery("#contact_form").serialize();
+			console.log("data----------->",form);
+            var formData = new FormData;
+			formData.append('action', 'contact_us');
+			formData.append('contact_us',form)
+
+			console.log("Formdata------->",formData.get('contact_us'))
+            $.ajax({
+                url: link,
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+				success: function(response){
+    if (response.success) {
+        alert("Form submitted successfully!");
+    } else {
+        alert("Error submitting form.");
+    }
+},
+
+            });
+        });
+    });
+</script>
 
 <?php get_footer(); ?>

@@ -222,12 +222,29 @@ add_shortcode( "footer_form", "mobile_form_shortcode" );
 add_action('wp_ajax_contact_us','ajax_contact_us');
 
 function ajax_contact_us(){
-    $arr=[];
-    wp_parse_str($_POST['contact_us'],$arr);
-    global $wbdp;
+    error_log("AJAX Contact Us function called."); 
+
+    $arr = [];
+    wp_parse_str($_POST['contact_us'], $arr);
+
+    error_log("Received data: " . print_r($arr, true)); 
+    global $wpdb;
     global $table_prefix;
-    
+    $table = $table_prefix . 'contact_us';
+    error_log("Table: " . $table); 
+
+    $result = $wpdb->insert($table, array(
+        "Name" => $arr['name'],
+        "Email" => $arr['email']
+    ));
+
+    if ($result !== false) {
+        wp_send_json_success("Form submitted successfully!");
+    } else {
+        wp_send_json_error("Error submitting form.");
+    }
 }
+
 
 
 ?>
