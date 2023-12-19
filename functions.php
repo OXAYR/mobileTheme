@@ -198,6 +198,29 @@ function custom_post_type_archive($query) {
 }
 add_action('pre_get_posts', 'custom_post_type_archive');
 
+function mobile_form_shortcode(){
+    $form_html = '
+    <form id="my_custom_form" action="submit" method="post" class="form-inline mt-2">
+    <div class="form-group  ">
+        <label for="name" class="sr-only w-25">Name:</label>
+        <input type="text" name="name" id="name" class="form-control" placeholder="Your Name" required>
+    </div>
+
+    <div class="form-group  mx-5">
+        <label for="email" class="sr-only">Email:</label>
+        <input type="email" name="email" id="email" class="form-control" placeholder="Your Email" required>
+    </div>
+</form>
+
+';
+
+return $form_html;
+}
+
+add_shortcode( "footer_form", "mobile_form_shortcode" );
+
+
+
 
 ?>
 
