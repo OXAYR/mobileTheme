@@ -96,9 +96,16 @@
                                 <?php while ($related_query->have_posts()) : $related_query->the_post(); ?>
                                     <div class="col-xs-12 col-sm-4">
                                         <div class="related-product">
-                                            <a href="<?php the_permalink(); ?>">
+                                            <a class="text-decoration-none" href="<?php the_permalink(); ?>">
                                                 <?php the_post_thumbnail('thumbnail', array('class' => 'img-responsive')); ?>
-                                                <h3><?php the_title(); ?></h3>
+                                                <h5 class="text-decoration-none text-secondary"><?php the_title(); ?></h5>
+                                                <p><?php
+                                                    $price = get_post_meta(get_the_ID(), '_price', true);
+                                                    if (!empty($price)) {
+                                                        echo '<p class="card-text">Price: ' . esc_html($price) . '</p>';
+                                                    }
+                                                ?>
+                                                </p>
                                             </a>
                                         </div>
                                     </div>
