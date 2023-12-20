@@ -231,8 +231,9 @@ function ajax_contact_us(){
 }
 
 function mobile_add_form_shortcode() {
-    ob_start(); 
+    
     ?>
+    <div>
     <form id="mobile_custom_form" action="#" method="post" class="form mt-2" enctype="multipart/form-data">
 
         <div class="form-row">
@@ -277,25 +278,25 @@ function mobile_add_form_shortcode() {
                 <label for="mobileImage">Mobile Image:</label>
                 <input type="file" class="form-control-file" id="mobileImage" name="mobileImage">
             </div>
+            <input type="hidden" name="nonce" id="nonce" value="<?php echo wp_create_nonce('mobile_form_nonce'); ?>">
+
         </div>
 
         <button type="button" class="btn btn-primary" id="submit_mobile_form">Submit</button>
     </form>
+    </div>
 
     <script>
         jQuery(document).ready(function($) {
             $('#submit_mobile_form').on('click', function() {
-                var form = jQuery("#mobile_custom_form").serialize();
-                console.log("data----------->", form);
-            var formData = new FormData;
-            formData.append('action', 'mobile_form');
-            formData.append('mobile_form', form);
-
-            console.log("Formdata------->", formData.get('mobile_form'));
+                var formData = new FormData($('#mobile_custom_form')[0]); 
+                var link = "<?php echo admin_url('admin-ajax.php'); ?>";
+                formData.append('action', 'mobile_form');
+                formData.append('nonce', $('#nonce').val());
 
                 $.ajax({
                     type: 'POST',
-                    url: "<?php echo admin_url('admin-ajax.php'); ?>",
+                    url: link,
                     data: formData,
                     processData: false,
                     contentType: false,
@@ -311,36 +312,54 @@ function mobile_add_form_shortcode() {
         });
     </script>
     <?php
-
-    return ob_get_clean(); 
-}
+};
 
 add_shortcode( "mobile_form", "mobile_add_form_shortcode" );
 
-add_action('wp_ajax_mobile_form', 'ajax_mobile_form');
+add_action('wp_ajax_mobile_form', 'handle_mobile_form_submission');
+add_action('wp_ajax_nopriv_mobile_form', 'handle_mobile_form_submission');
 
-function ajax_mobile_form() {
-    error_log("AJAX Mobile Form function called."); 
+function handle_mobile_form_submission() {
+    check_ajax_referer('mobile_form_nonce', 'nonce');
 
-    $arr = [];
-    wp_parse_str($_POST['mobile_form'], $arr);
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'mobile_form') {
+        $mobile_name = sanitize_text_field($_POST['mobileName']);
+        $dimensions = sanitize_text_field($_POST['dimensions']);
+        $ram = sanitize_text_field($_POST['ram']);
+        $rom = sanitize_text_field($_POST['rom']);
+        $front_camera = sanitize_text_field($_POST['frontCamera']);
+        $back_camera = sanitize_text_field($_POST['backCamera']);
+        $price = sanitize_text_field($_POST['price']);
 
-    error_log("Received data: " . print_r($arr, true)); 
-    global $wpdb;
-    global $table_prefix;
-    $table = $table_prefix . 'contact_us';
-    error_log("Table: " . $table); 
+        $post_id = wp_insert_post(array(
+            'post_title' => $mobile_name,
+            'post_content' => '',
+            'post_type' => 'mobile',
+            'post_status' => 'publish',
+        ));
 
-    $result = $wpdb->insert($table, array(
-        "Name" => $arr['mobileName'], 
-        "Email" => $arr['dimensions'] 
-    ));
+        update_post_meta($post_id, '_dimensions', $dimensions);
+        update_post_meta($post_id, '_ram', $ram);
+        update_post_meta($post_id, '_rom', $rom);
+        update_post_meta($post_id, '_front_camera', $front_camera);
+        update_post_meta($post_id, '_back_camera', $back_camera);
+        update_post_meta($post_id, '_price', $price);
 
-    if ($result !== false) {
+        if (!empty($_FILES['mobileImage']['name'])) {
+            $uploaded_file = wp_handle_upload($_FILES['mobileImage'], array('test_form' => false));
+            if (!isset($uploaded_file['error'])) {
+                update_post_meta($post_id, '_mobile_image', $uploaded_file['url']);
+            } else {
+                error_log("Error uploading file: " . $uploaded_file['error']); 
+            }
+        }
+
         wp_send_json_success("Form submitted successfully!");
     } else {
         wp_send_json_error("Error submitting form.");
     }
+
+    wp_die();
 }
 
 
