@@ -250,33 +250,33 @@ function mobile_add_form_shortcode() {
         <div class="form-row">
             <div class="col-md-6 mb-3">
                 <label for="ram">RAM:</label>
-                <input type="text" class="form-control" id="ram" name="ram" placeholder="RAM">
+                <input type="text" class="form-control" id="ram" name="ram" placeholder="RAM" required>
             </div>
             <div class="col-md-6 mb-3">
                 <label for="rom">ROM:</label>
-                <input type="text" class="form-control" id="rom" name="rom" placeholder="ROM">
+                <input type="text" class="form-control" id="rom" name="rom" placeholder="ROM" required>
             </div>
         </div>
 
         <div class="form-row">
             <div class="col-md-6 mb-3">
                 <label for="frontCamera">Front Camera:</label>
-                <input type="text" class="form-control" id="frontCamera" name="frontCamera" placeholder="Front Camera">
+                <input type="text" class="form-control" id="frontCamera" name="frontCamera" placeholder="Front Camera" required>
             </div>
             <div class="col-md-6 mb-3">
                 <label for="backCamera">Back Camera:</label>
-                <input type="text" class="form-control" id="backCamera" name="backCamera" placeholder="Back Camera">
+                <input type="text" class="form-control" id="backCamera" name="backCamera" placeholder="Back Camera" required>
             </div>
         </div>
 
         <div class="form-row">
             <div class="col-md-6 mb-3">
                 <label for="price">Price:</label>
-                <input type="text" class="form-control" id="price" name="price" placeholder="Price">
+                <input type="text" class="form-control" id="price" name="price" placeholder="Price" required>
             </div>
             <div class="col-md-6 mb-3">
                 <label for="mobileImage">Mobile Image:</label>
-                <input type="file" class="form-control-file" id="mobileImage" name="mobileImage">
+                <input type="file" class="form-control-file" id="mobileImage" name="mobileImage" required>
             </div>
             <input type="hidden" name="nonce" id="nonce" value="<?php echo wp_create_nonce('mobile_form_nonce'); ?>">
 
