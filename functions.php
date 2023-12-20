@@ -230,6 +230,118 @@ function ajax_contact_us(){
     }
 }
 
+function mobile_add_form_shortcode() {
+    ob_start(); 
+    ?>
+    <form id="mobile_custom_form" action="#" method="post" class="form mt-2" enctype="multipart/form-data">
+
+        <div class="form-row">
+            <div class="col-md-6 mb-3">
+                <label for="mobileName">Mobile Name:</label>
+                <input type="text" class="form-control" id="mobileName" name="mobileName" placeholder="Mobile Name" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="dimensions">Dimensions:</label>
+                <input type="text" class="form-control" id="dimensions" name="dimensions" placeholder="Dimensions" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-md-6 mb-3">
+                <label for="ram">RAM:</label>
+                <input type="text" class="form-control" id="ram" name="ram" placeholder="RAM">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="rom">ROM:</label>
+                <input type="text" class="form-control" id="rom" name="rom" placeholder="ROM">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-md-6 mb-3">
+                <label for="frontCamera">Front Camera:</label>
+                <input type="text" class="form-control" id="frontCamera" name="frontCamera" placeholder="Front Camera">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="backCamera">Back Camera:</label>
+                <input type="text" class="form-control" id="backCamera" name="backCamera" placeholder="Back Camera">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col-md-6 mb-3">
+                <label for="price">Price:</label>
+                <input type="text" class="form-control" id="price" name="price" placeholder="Price">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="mobileImage">Mobile Image:</label>
+                <input type="file" class="form-control-file" id="mobileImage" name="mobileImage">
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="submit_mobile_form">Submit</button>
+    </form>
+
+    <script>
+        jQuery(document).ready(function($) {
+            $('#submit_mobile_form').on('click', function() {
+                var form = jQuery("#mobile_custom_form").serialize();
+                console.log("data----------->", form);
+            var formData = new FormData;
+            formData.append('action', 'mobile_form');
+            formData.append('mobile_form', form);
+
+            console.log("Formdata------->", formData.get('mobile_form'));
+
+                $.ajax({
+                    type: 'POST',
+                    url: "<?php echo admin_url('admin-ajax.php'); ?>",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response){
+                        if (response.success) {
+                            $('#response_message').html('<p style="color: green;">Response recorded</p>');
+                        } else {
+                            $('#response_message').html('<p style="color: red;">Try again</p>');
+                        }
+                    },
+                });
+            });
+        });
+    </script>
+    <?php
+
+    return ob_get_clean(); 
+}
+
+add_shortcode( "mobile_form", "mobile_add_form_shortcode" );
+
+add_action('wp_ajax_mobile_form', 'ajax_mobile_form');
+
+function ajax_mobile_form() {
+    error_log("AJAX Mobile Form function called."); 
+
+    $arr = [];
+    wp_parse_str($_POST['mobile_form'], $arr);
+
+    error_log("Received data: " . print_r($arr, true)); 
+    global $wpdb;
+    global $table_prefix;
+    $table = $table_prefix . 'contact_us';
+    error_log("Table: " . $table); 
+
+    $result = $wpdb->insert($table, array(
+        "Name" => $arr['mobileName'], 
+        "Email" => $arr['dimensions'] 
+    ));
+
+    if ($result !== false) {
+        wp_send_json_success("Form submitted successfully!");
+    } else {
+        wp_send_json_error("Error submitting form.");
+    }
+}
 
 
 ?>
