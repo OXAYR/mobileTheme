@@ -233,7 +233,7 @@ function ajax_contact_us(){
 function mobile_add_form_shortcode() {
     
     ?>
-    <div>
+    
     <form id="mobile_custom_form" action="#" method="post" class="form mt-2" enctype="multipart/form-data">
 
         <div class="form-row">
@@ -284,7 +284,6 @@ function mobile_add_form_shortcode() {
 
         <button type="button" class="btn btn-primary" id="submit_mobile_form">Submit</button>
     </form>
-    </div>
 
     <script>
         jQuery(document).ready(function($) {
