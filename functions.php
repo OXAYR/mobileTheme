@@ -450,6 +450,113 @@ function upload_user_file($file = array()) {
 
 
 
+function mobile_store_options_init() {
+    
+    register_setting('mobile_store_options', 'mobile_store_options');
+
+    
+    add_settings_section(
+        'mobile_general_section',
+        'Mobile Store General Settings',
+        'mobile_general_section_callback',
+        'mobile_store_options'
+    );
+
+    
+    add_settings_field(
+        'store_name',
+        'Store Name',
+        'store_name_callback',
+        'mobile_store_options',
+        'mobile_general_section'
+    );
+
+    add_settings_field(
+        'tagline',
+        'Tagline',
+        'tagline_callback',
+        'mobile_store_options',
+        'mobile_general_section'
+    );
+
+}
+
+function mobile_general_section_callback() {
+    echo '<p>Configure general settings for the mobile store.</p>';
+}
+
+
+function store_name_callback() {
+    $options = get_option('mobile_store_options');
+    $store_name = isset($options['store_name']) ? $options['store_name'] : '';
+
+    echo '<input type="text" id="store_name" name="mobile_store_options[store_name]" value="' . esc_attr($store_name) . '" />';
+}
+
+
+function tagline_callback() {
+    $options = get_option('mobile_store_options');
+    $tagline = isset($options['tagline']) ? $options['tagline'] : '';
+
+    echo '<input type="text" id="tagline" name="mobile_store_options[tagline]" value="' . esc_attr($tagline) . '" />';
+}
+
+
+
+
+
+function mobile_store_options_add_page() {
+    add_theme_page(
+        'Mobile Store Options',
+        'Mobile Store Options',
+        'manage_options',
+        'mobile_store_options',
+        'mobile_store_options_page'
+    );
+}
+
+
+function mobile_store_options_page() {
+    ?>
+    <div class="wrap">
+        <h1>Mobile Store Options</h1>
+        <form method="post" action="options.php">
+            <?php
+            settings_fields('mobile_store_options');
+            do_settings_sections('mobile_store_options');
+            submit_button();
+            ?>
+        </form>
+    </div>
+    <?php
+}
+
+
+add_action('admin_init', 'mobile_store_options_init');
+add_action('admin_menu', 'mobile_store_options_add_page');
+
+
+
+function display_store_name_in_navbar($title) {
+    
+    if (!is_admin() && is_home()) {
+        
+        $options = get_option('mobile_store_options');
+        $store_name = isset($options['store_name']) ? $options['store_name'] : '';
+
+        
+        if ($store_name) {
+            $title .= ' - ' . esc_html($store_name);
+        }
+    }
+
+    return $title;
+}
+
+
+add_filter('wp_title', 'display_store_name_in_navbar');
+
+
 
 ?>
 
