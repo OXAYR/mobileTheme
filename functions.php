@@ -230,65 +230,105 @@ function ajax_contact_us(){
     }
 }
 
-function mobile_add_form_shortcode() {
+function mobile_add_form_shortcode($atts) {
     
+    $atts = shortcode_atts(
+        array(
+            'show_name' => true,
+            'show_dimensions' => false,
+            'show_ram' => false,
+            'show_rom' => false,
+            'show_front_camera' => false,
+            'show_back_camera' => true,
+            'show_price' => true,
+            'show_image' => true,
+        ),
+        $atts,
+        'mobile_form'
+    );
+
+    ob_start();
     ?>
-    
     <form id="mobile_custom_form" action="#" method="post" class="form mt-2" enctype="multipart/form-data">
+        <?php if ($atts['show_name']) : ?>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label for="mobileName">Mobile Name:</label>
+                    <input type="text" class="form-control" id="mobileName" name="mobileName" placeholder="Mobile Name" required>
+                </div>
+            </div>
+        <?php endif; ?>
 
-        <div class="form-row">
-            <div class="col-md-6 mb-3">
-                <label for="mobileName">Mobile Name:</label>
-                <input type="text" class="form-control" id="mobileName" name="mobileName" placeholder="Mobile Name" required>
+        <?php if ($atts['show_dimensions']) : ?>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label for="dimensions">Dimensions:</label>
+                    <input type="text" class="form-control" id="dimensions" name="dimensions" placeholder="Dimensions" required>
+                </div>
             </div>
-            <div class="col-md-6 mb-3">
-                <label for="dimensions">Dimensions:</label>
-                <input type="text" class="form-control" id="dimensions" name="dimensions" placeholder="Dimensions" required>
-            </div>
-        </div>
+        <?php endif; ?>
 
-        <div class="form-row">
-            <div class="col-md-6 mb-3">
-                <label for="ram">RAM:</label>
-                <input type="text" class="form-control" id="ram" name="ram" placeholder="RAM" required>
+        <?php if ($atts['show_ram']) : ?>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label for="ram">RAM:</label>
+                    <input type="text" class="form-control" id="ram" name="ram" placeholder="RAM">
+                </div>
             </div>
-            <div class="col-md-6 mb-3">
-                <label for="rom">ROM:</label>
-                <input type="text" class="form-control" id="rom" name="rom" placeholder="ROM" required>
-            </div>
-        </div>
+        <?php endif; ?>
 
-        <div class="form-row">
-            <div class="col-md-6 mb-3">
-                <label for="frontCamera">Front Camera:</label>
-                <input type="text" class="form-control" id="frontCamera" name="frontCamera" placeholder="Front Camera" required>
+        <?php if ($atts['show_rom']) : ?>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label for="rom">ROM:</label>
+                    <input type="text" class="form-control" id="rom" name="rom" placeholder="ROM">
+                </div>
             </div>
-            <div class="col-md-6 mb-3">
-                <label for="backCamera">Back Camera:</label>
-                <input type="text" class="form-control" id="backCamera" name="backCamera" placeholder="Back Camera" required>
-            </div>
-        </div>
+        <?php endif; ?>
 
-        <div class="form-row">
-            <div class="col-md-6 mb-3">
-                <label for="price">Price:</label>
-                <input type="text" class="form-control" id="price" name="price" placeholder="Price" required>
+        <?php if ($atts['show_front_camera']) : ?>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label for="frontCamera">Front Camera:</label>
+                    <input type="text" class="form-control" id="frontCamera" name="frontCamera" placeholder="Front Camera">
+                </div>
             </div>
-            <div class="col-md-6 mb-3">
-                <label for="mobileImage">Mobile Image:</label>
-                <input type="file" class="form-control-file" id="mobileImage" name="mobileImage" required>
-            </div>
-            <input type="hidden" name="nonce" id="nonce" value="<?php echo wp_create_nonce('mobile_form_nonce'); ?>">
+        <?php endif; ?>
 
-        </div>
+        <?php if ($atts['show_back_camera']) : ?>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label for="backCamera">Back Camera:</label>
+                    <input type="text" class="form-control" id="backCamera" name="backCamera" placeholder="Back Camera">
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($atts['show_price']) : ?>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label for="price">Price:</label>
+                    <input type="text" class="form-control" id="price" name="price" placeholder="Price">
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($atts['show_image']) : ?>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label for="mobileImage">Mobile Image:</label>
+                    <input type="file" class="form-control-file" id="mobileImage" name="mobileImage">
+                </div>
+            </div>
+        <?php endif; ?>
 
         <button type="button" class="btn btn-primary" id="submit_mobile_form">Submit</button>
     </form>
 
     <script>
-        jQuery(document).ready(function($) {
-            $('#submit_mobile_form').on('click', function() {
-                var formData = new FormData($('#mobile_custom_form')[0]); 
+        jQuery(document).ready(function ($) {
+            $('#submit_mobile_form').on('click', function () {
+                var formData = new FormData($('#mobile_custom_form')[0]);
                 var link = "<?php echo admin_url('admin-ajax.php'); ?>";
                 formData.append('action', 'mobile_form');
                 formData.append('nonce', $('#nonce').val());
@@ -299,7 +339,7 @@ function mobile_add_form_shortcode() {
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function(response){
+                    success: function (response) {
                         if (response.success) {
                             $('#response_message').html('<p style="color: green;">Response recorded</p>');
                         } else {
@@ -311,9 +351,11 @@ function mobile_add_form_shortcode() {
         });
     </script>
     <?php
-};
+    return ob_get_clean();
+}
 
-add_shortcode( "mobile_form", "mobile_add_form_shortcode" );
+add_shortcode("mobile_form", "mobile_add_form_shortcode");
+
 
 add_action('wp_ajax_mobile_form', 'handle_mobile_form_submission');
 add_action('wp_ajax_nopriv_mobile_form', 'handle_mobile_form_submission');
