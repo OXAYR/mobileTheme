@@ -328,6 +328,8 @@ function mobile_add_form_shortcode($atts) {
             </div>
         <?php endif; ?>
 
+        <input type="hidden" name="nonce" id="nonce" value="<?php echo wp_create_nonce('mobile_form_nonce'); ?>">
+
         <button type="button" class="btn btn-primary" id="submit_mobile_form">Submit</button>
     </form>
 
@@ -362,7 +364,6 @@ function mobile_add_form_shortcode($atts) {
 
 add_shortcode("mobile_form", "mobile_add_form_shortcode");
 
-
 add_action('wp_ajax_mobile_form', 'handle_mobile_form_submission');
 add_action('wp_ajax_nopriv_mobile_form', 'handle_mobile_form_submission');
 
@@ -378,6 +379,17 @@ function handle_mobile_form_submission() {
         $back_camera = sanitize_text_field($_POST['backCamera']);
         $price = sanitize_text_field($_POST['price']);
 
+        // Use an array to organize meta data
+        $mobile_data = array(
+            '_dimensions' => $dimensions,
+            '_ram' => $ram,
+            '_rom' => $rom,
+            '_front_camera' => $front_camera,
+            '_back_camera' => $back_camera,
+            '_price' => $price,
+        );
+
+        // Create the mobile post
         $post_id = wp_insert_post(array(
             'post_title' => $mobile_name,
             'post_content' => '',
@@ -385,29 +397,58 @@ function handle_mobile_form_submission() {
             'post_status' => 'publish',
         ));
 
-        update_post_meta($post_id, '_dimensions', $dimensions);
-        update_post_meta($post_id, '_ram', $ram);
-        update_post_meta($post_id, '_rom', $rom);
-        update_post_meta($post_id, '_front_camera', $front_camera);
-        update_post_meta($post_id, '_back_camera', $back_camera);
-        update_post_meta($post_id, '_price', $price);
+        
+        foreach ($mobile_data as $meta_key => $meta_value) {
+            update_post_meta($post_id, $meta_key, $meta_value);
+        }
+
 
         if (!empty($_FILES['mobileImage']['name'])) {
-            $uploaded_file = wp_handle_upload($_FILES['mobileImage'], array('test_form' => false));
-            if (!isset($uploaded_file['error'])) {
-                update_post_meta($post_id, '_mobile_image', $uploaded_file['url']);
+            $attachment_id = upload_user_file($_FILES['mobileImage']);
+            if ($attachment_id !== false) {
+                update_post_meta($post_id, '_thumbnail_id', $attachment_id);
             } else {
-                error_log("Error uploading file: " . $uploaded_file['error']); 
+                
+                wp_delete_post($post_id, true);
+                wp_send_json_error("Error uploading file.");
             }
         }
 
         wp_send_json_success("Form submitted successfully!");
     } else {
-        wp_send_json_error("Error submitting form.");
+        wp_send_json_error("Error submitting form. Invalid request.");
     }
 
     wp_die();
 }
+
+function upload_user_file($file = array()) {
+    require_once(ABSPATH . 'wp-admin/includes/admin.php');
+    $file_return = wp_handle_upload($file, array('test_form' => false));
+    if (isset($file_return['error']) || isset($file_return['upload_error_handler'])) {
+        return false;
+    } else {
+        $filename = $file_return['file'];
+        $attachment = array(
+            'post_mime_type' => $file_return['type'],
+            'post_title' => preg_replace('/\.[^.]+$/', '', basename($filename)),
+            'post_content' => '',
+            'post_status' => 'inherit',
+            'guid' => $file_return['url']
+        );
+        $attachment_id = wp_insert_attachment($attachment, $file_return['url']);
+        require_once(ABSPATH . 'wp-admin/includes/image.php');
+        $attachment_data = wp_generate_attachment_metadata($attachment_id, $filename);
+        wp_update_attachment_metadata($attachment_id, $attachment_data);
+        if (intval($attachment_id) > 0) {
+            return $attachment_id;
+        }
+    }
+    return false;
+}
+
+
+
 
 
 ?>
