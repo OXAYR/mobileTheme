@@ -247,6 +247,12 @@ function mobile_add_form_shortcode($atts) {
         'mobile_form'
     );
 
+     $atts['show_dimensions'] = filter_var($atts['show_dimensions'], FILTER_VALIDATE_BOOLEAN);
+     $atts['show_ram'] = filter_var($atts['show_ram'], FILTER_VALIDATE_BOOLEAN);
+     $atts['show_rom'] = filter_var($atts['show_rom'], FILTER_VALIDATE_BOOLEAN);
+     $atts['show_front_camera'] = filter_var($atts['show_front_camera'], FILTER_VALIDATE_BOOLEAN);
+     $atts['show_back_camera'] = filter_var($atts['show_back_camera'], FILTER_VALIDATE_BOOLEAN); 
+
     ob_start();
     ?>
     <form id="mobile_custom_form" action="#" method="post" class="form mt-2" enctype="multipart/form-data">
