@@ -379,9 +379,9 @@ function handle_mobile_form_submission() {
         $back_camera = sanitize_text_field($_POST['backCamera']);
         $price = sanitize_text_field($_POST['price']);
 
-        // Use an array to organize meta data
+        
         $mobile_data = array(
-            '_dimensions' => $dimensions,
+            '_screen_resolution' => $dimensions,
             '_ram' => $ram,
             '_rom' => $rom,
             '_front_camera' => $front_camera,
@@ -389,7 +389,7 @@ function handle_mobile_form_submission() {
             '_price' => $price,
         );
 
-        // Create the mobile post
+        
         $post_id = wp_insert_post(array(
             'post_title' => $mobile_name,
             'post_content' => '',
