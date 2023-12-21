@@ -239,7 +239,7 @@ function mobile_add_form_shortcode($atts) {
             'show_ram' => false,
             'show_rom' => false,
             'show_front_camera' => false,
-            'show_back_camera' => true,
+            'show_back_camera' => false,
             'show_price' => true,
             'show_image' => true,
         ),

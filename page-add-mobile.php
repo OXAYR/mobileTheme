@@ -1,5 +1,5 @@
 <?php
-// Set default values or retrieve them from other sources
+
 $show_name = true;
 $show_dimensions = true;
 $show_ram = true;
@@ -9,7 +9,7 @@ $show_back_camera = true;
 $show_price = true;
 $show_image = true;
 
-// Check if form is submitted and update values accordingly
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $show_name = isset($_POST['show_name']);
     $show_dimensions = isset($_POST['show_dimensions']);
@@ -28,14 +28,11 @@ get_header();
     <div class="row">
         <div class="col-xs-12 col-sm-8">
             <form method="post" id="featureForm">
-                <label><input type="checkbox" name="show_name" <?php echo $show_name ? 'checked' : ''; ?>> Show Name</label><br>
                 <label><input type="checkbox" name="show_dimensions" <?php echo $show_dimensions ? 'checked' : ''; ?>> Show Dimensions</label><br>
                 <label><input type="checkbox" name="show_ram" <?php echo $show_ram ? 'checked' : ''; ?>> Show RAM</label><br>
                 <label><input type="checkbox" name="show_rom" <?php echo $show_rom ? 'checked' : ''; ?>> Show ROM</label><br>
                 <label><input type="checkbox" name="show_front_camera" <?php echo $show_front_camera ? 'checked' : ''; ?>> Show Front Camera</label><br>
                 <label><input type="checkbox" name="show_back_camera" <?php echo $show_back_camera ? 'checked' : ''; ?>> Show Back Camera</label><br>
-                <label><input type="checkbox" name="show_price" <?php echo $show_price ? 'checked' : ''; ?>> Show Price</label><br>
-                <label><input type="checkbox" name="show_image" <?php echo $show_image ? 'checked' : ''; ?>> Show Image</label><br>
                 <input type="submit" value="Submit">
             </form>
             <?php
