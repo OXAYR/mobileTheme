@@ -161,17 +161,30 @@ function display_mobile_custom_fields($post) {
 }
 
 function save_mobile_custom_fields($post_id) {
-update_post_meta($post_id, '_ram', sanitize_text_field($_POST['ram']));
+    
+    if (isset($_POST['ram'])) {
+        update_post_meta($post_id, '_ram', sanitize_text_field($_POST['ram']));
+    }
 
-update_post_meta($post_id, '_front_camera', sanitize_text_field($_POST['front_camera']));
+    if (isset($_POST['front_camera'])) {
+        update_post_meta($post_id, '_front_camera', sanitize_text_field($_POST['front_camera']));
+    }
 
-update_post_meta($post_id, '_back_camera', sanitize_text_field($_POST['back_camera']));
+    if (isset($_POST['back_camera'])) {
+        update_post_meta($post_id, '_back_camera', sanitize_text_field($_POST['back_camera']));
+    }
 
-update_post_meta($post_id, '_screen_resolution', sanitize_text_field($_POST['screen_resolution']));
+    if (isset($_POST['screen_resolution'])) {
+        update_post_meta($post_id, '_screen_resolution', sanitize_text_field($_POST['screen_resolution']));
+    }
 
-update_post_meta($post_id, '_rom', sanitize_text_field($_POST['rom']));
+    if (isset($_POST['rom'])) {
+        update_post_meta($post_id, '_rom', sanitize_text_field($_POST['rom']));
+    }
 
-update_post_meta($post_id, '_price', sanitize_text_field($_POST['price']));
+    if (isset($_POST['price'])) {
+        update_post_meta($post_id, '_price', sanitize_text_field($_POST['price']));
+    }
 }
 add_action('save_post', 'save_mobile_custom_fields');
 
