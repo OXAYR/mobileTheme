@@ -447,6 +447,19 @@ function upload_user_file($file = array()) {
     return false;
 }
 
+function fake_post_type() {
+    register_post_type('fake_products', array(
+        'labels' => array(
+            'name' => __('Fake Products'),
+            'singular_name' => __('Fake Product')
+        ),
+        'public' => true,
+        'has_archive' => true,
+        'supports' => array('title', 'editor', 'custom-fields')
+    ));
+}
+add_action('init', 'fake_post_type');
+
 
 
 
