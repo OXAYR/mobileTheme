@@ -8,7 +8,7 @@ get_header(); ?>
 	<div class="container">
 		<div class="row justify-content-between">
 
-			<div class="">
+			<div class=" ">
 			<?php 
 			
 			if( have_posts() ):
