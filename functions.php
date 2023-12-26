@@ -584,6 +584,20 @@ add_filter('wp_title', 'display_store_name_in_navbar');
 
 
 
+// add_action('wp_nav_menu_objects', 'display_menu_item_ids', 10, 2);
+
+// function display_menu_item_ids($items, $args) {
+//     foreach ($items as $item) {
+//         // Output the ID and other details for each menu item
+//         echo '<pre>';
+//         print_r($item);
+//         echo '</pre>';
+//     }
+
+//     return $items;
+// }
+
+
 ?>
 
 

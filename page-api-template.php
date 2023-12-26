@@ -7,10 +7,10 @@ get_header();
 ?>
 
 <div class="container mt-5">
-    <form method="get" class="form-inline">
+    <form method="get" class="form-inline" id="form">
         <label for="data" class="mr-2">Search Fake Product</label>
         <input type="text" name="data" class="form-control mr-2" required>
-        <button type="submit" class="btn btn-primary">Search</button>
+        <input type="submit" class="btn btn-primary" value="submit"/>
     </form>
 </div>
 
@@ -61,6 +61,8 @@ if (isset($_GET['data'])) {
         }
     }
 }
+
+
 
 get_footer();
 ?>
